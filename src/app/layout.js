@@ -1,5 +1,7 @@
 import localFont from "next/font/local";
 import "./globals.css";
+import { CopilotKit } from "@copilotkit/react-core";
+import Navbar from "@/components/Navbar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -23,7 +25,10 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <Navbar />
+        <CopilotKit publicApiKey="ck_pub_58ec46ebd5dce6263a17a3ec0ee91e03">
+          {children}
+        </CopilotKit>
       </body>
     </html>
   );

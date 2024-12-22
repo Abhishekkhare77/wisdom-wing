@@ -1,101 +1,72 @@
-import Image from "next/image";
+"use client";
+import { CopilotChat, CopilotPopup } from "@copilotkit/react-ui";
+import "@copilotkit/react-ui/styles.css";
+import { useCopilotReadable } from "@copilotkit/react-core";
+import { useState } from "react";
+import { useCopilotAction } from "@copilotkit/react-core";
+import { CopilotTextarea } from "@copilotkit/react-textarea";
+import "@copilotkit/react-textarea/styles.css";
+import Quiz from "@/components/Quiz";
+
+//lets say you learn a topic and you want to check your understanding of the topic with the help of a quiz
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [text, setText] = useState("");
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useCopilotReadable({
+    description: "This is a text area",
+    value: text,
+  });
+
+  useCopilotAction({
+    name: "Add text",
+    description: "Add text to the text area",
+    parameters: [
+      {
+        name: "text",
+        description: "The text to add",
+        type: "string",
+        required: true,
+      },
+    ],
+    handler: ({ text }) => {
+      setText(text);
+    },
+  });
+
+  return (
+    <main className="max-w-7xl mx-auto">
+      <CopilotPopup />
+      <div className="flex items-center justify-center gap-3 ">
+        <div className="flex flex-col h-full w-full">
+          <CopilotTextarea
+            className="custom-textarea-class border py-2 px-2 mb-3 rounded-md"
+            value={text}
+            onValueChange={(value) => setText(value)}
+            placeholder="Write the topic you want to learn about."
+            autosuggestionsConfig={{
+              textareaPurpose: "Helps to give formal replay to any message .",
+              chatApiConfigs: {
+                suggestionsApiConfig: {
+                  maxTokens: 20,
+                  stop: [".", "?", "!"],
+                },
+              },
+            }}
+          />
+          <div className="overflow-y-auto h-[calc(100vh-10rem)] w-full">
+            <Quiz />
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+        <CopilotChat
+          className="w-1/2 h-[calc(100vh-5rem)] border-2 rounded-md"
+          labels={{
+            title: "Your Assistant",
+            initial:
+              "Ask me specific part about the concepts to learn further about it to answer the quiz",
+          }}
+        />
+      </div>
+    </main>
   );
 }
