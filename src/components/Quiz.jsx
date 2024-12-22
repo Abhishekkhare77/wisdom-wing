@@ -35,7 +35,8 @@ const sampleQuizzes = [
     },
 ];
 
-const Quiz = () => {
+const Quiz = ({ text }) => {
+
     const [quizStates, setQuizStates] = useState(
         sampleQuizzes.map(() => ({ selectedAnswer: null, isCorrect: null }))
     );

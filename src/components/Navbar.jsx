@@ -14,24 +14,24 @@ export default function Navbar() {
                     </Button>
                 </SheetTrigger>
                 <SheetContent side="left">
-                    <Link href="#" className="mr-6 hidden lg:flex" prefetch={false}>
+                    <Link href="/" className="mr-6 hidden lg:flex" prefetch={false}>
                         <MessageCircleQuestion size={25} />
                         <span className="sr-only">Acme Inc</span>
                     </Link>
                     <div className="grid gap-2 py-6">
-                        <Link href="#" className={buttonVariants()} prefetch={false}>
+                        <Link href="/history" className={buttonVariants()} prefetch={false}>
                             History
                         </Link>
                     </div>
                 </SheetContent>
             </Sheet>
-            <Link href="#" className="mr-6 hidden lg:flex" prefetch={false}>
+            <Link href="/" className="mr-6 hidden lg:flex" prefetch={false}>
                 <span className="text-lg font-bold text-pretty tracking-tight mr-2">Wisdom Wing</span><MessageCircleQuestion size={25} />
                 <span className="sr-only">Acme Inc</span>
             </Link>
             <nav className="ml-auto hidden lg:flex gap-6">
                 <Link
-                    href="#"
+                    href="/history"
                     className={buttonVariants()}
                     prefetch={false}
                 >
